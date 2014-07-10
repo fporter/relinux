@@ -191,8 +191,11 @@ class genPakManifest(threadmanager.Thread):
         writer = open(isotreel + "casper/filesystem.manifest", "w")
         writer_desktop = open(
             isotreel + "casper/filesystem.manifest-desktop", "w")
+
+        # installedVersion throws an error when it doesn't exist in 'Package'
+        # TODO: figure out why, but for now.. check for attribute as well
         for i in config.AptCache:
-            if i.installedVersion is None or len(i.installedVersion) <= 0:
+            if not hasattr(i,'installedVersion') or i.installedVersion is None or len(i.installedVersion) <= 0:
                 continue
             name = i.fullname.strip()
             ver = i.installedVersion.strip()
